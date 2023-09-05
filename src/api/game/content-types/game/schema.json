@@ -24,7 +24,12 @@
       "type": "text"
     },
     "description": {
-      "type": "richtext"
+      "type": "customField",
+      "options": {
+        "output": "HTML",
+        "preset": "rich"
+      },
+      "customField": "plugin::ckeditor.CKEditor"
     },
     "price": {
       "type": "decimal",
@@ -35,30 +40,19 @@
     },
     "rating": {
       "type": "enumeration",
-      "enum": [
-        "PEGI_3",
-        "PEGI_7",
-        "PEGI_12",
-        "PEGI_16",
-        "PEGI_18"
-      ]
+      "enum": ["PEGI_3", "PEGI_7", "PEGI_12", "PEGI_16", "PEGI_18"]
     },
     "cover": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "gallery": {
       "type": "media",
       "multiple": true,
       "required": false,
-      "allowedTypes": [
-        "images",
-        "videos"
-      ]
+      "allowedTypes": ["images", "videos"]
     },
     "categories": {
       "type": "relation",
