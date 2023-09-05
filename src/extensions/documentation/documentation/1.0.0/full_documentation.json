@@ -14,11 +14,14 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2023-09-05T20:16:56.276Z"
+    "x-generation-date": "2023-09-05T20:39:08.988Z"
   },
   "x-strapi-config": {
     "path": "/documentation",
-    "plugins": ["upload", "users-permissions"]
+    "plugins": [
+      "upload",
+      "users-permissions"
+    ]
   },
   "servers": [
     {
@@ -46,7 +49,9 @@
     "schemas": {
       "Error": {
         "type": "object",
-        "required": ["error"],
+        "required": [
+          "error"
+        ],
         "properties": {
           "data": {
             "nullable": true,
@@ -83,10 +88,14 @@
       },
       "CategoryRequest": {
         "type": "object",
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "properties": {
           "data": {
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "type": "object",
             "properties": {
               "name": {
@@ -161,7 +170,9 @@
       },
       "Category": {
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
           "name": {
             "type": "string"
@@ -1446,10 +1457,14 @@
       },
       "DeveloperRequest": {
         "type": "object",
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "properties": {
           "data": {
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "type": "object",
             "properties": {
               "name": {
@@ -1524,7 +1539,9 @@
       },
       "Developer": {
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
           "name": {
             "type": "string"
@@ -2809,10 +2826,15 @@
       },
       "GameRequest": {
         "type": "object",
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "properties": {
           "data": {
-            "required": ["name", "price"],
+            "required": [
+              "name",
+              "price"
+            ],
             "type": "object",
             "properties": {
               "name": {
@@ -2837,7 +2859,13 @@
               },
               "rating": {
                 "type": "string",
-                "enum": ["PEGI_3", "PEGI_7", "PEGI_12", "PEGI_16", "PEGI_18"]
+                "enum": [
+                  "PEGI_3",
+                  "PEGI_7",
+                  "PEGI_12",
+                  "PEGI_16",
+                  "PEGI_18"
+                ]
               },
               "cover": {
                 "oneOf": [
@@ -2969,7 +2997,10 @@
       },
       "Game": {
         "type": "object",
-        "required": ["name", "price"],
+        "required": [
+          "name",
+          "price"
+        ],
         "properties": {
           "name": {
             "type": "string"
@@ -2993,7 +3024,13 @@
           },
           "rating": {
             "type": "string",
-            "enum": ["PEGI_3", "PEGI_7", "PEGI_12", "PEGI_16", "PEGI_18"]
+            "enum": [
+              "PEGI_3",
+              "PEGI_7",
+              "PEGI_12",
+              "PEGI_16",
+              "PEGI_18"
+            ]
           },
           "cover": {
             "type": "object",
@@ -4610,10 +4647,14 @@
       },
       "PlatformRequest": {
         "type": "object",
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "properties": {
           "data": {
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "type": "object",
             "properties": {
               "name": {
@@ -4688,7 +4729,9 @@
       },
       "Platform": {
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
           "name": {
             "type": "string"
@@ -5973,10 +6016,14 @@
       },
       "PublisherRequest": {
         "type": "object",
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "properties": {
           "data": {
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "type": "object",
             "properties": {
               "name": {
@@ -6051,7 +6098,9 @@
       },
       "Publisher": {
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
           "name": {
             "type": "string"
@@ -7606,7 +7655,9 @@
             }
           }
         },
-        "tags": ["Category"],
+        "tags": [
+          "Category"
+        ],
         "parameters": [
           {
             "name": "sort",
@@ -7775,7 +7826,9 @@
             }
           }
         },
-        "tags": ["Category"],
+        "tags": [
+          "Category"
+        ],
         "parameters": [],
         "operationId": "post/categories",
         "requestBody": {
@@ -7854,7 +7907,9 @@
             }
           }
         },
-        "tags": ["Category"],
+        "tags": [
+          "Category"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -7932,7 +7987,9 @@
             }
           }
         },
-        "tags": ["Category"],
+        "tags": [
+          "Category"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -8021,7 +8078,9 @@
             }
           }
         },
-        "tags": ["Category"],
+        "tags": [
+          "Category"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -8101,7 +8160,9 @@
             }
           }
         },
-        "tags": ["Developer"],
+        "tags": [
+          "Developer"
+        ],
         "parameters": [
           {
             "name": "sort",
@@ -8270,7 +8331,9 @@
             }
           }
         },
-        "tags": ["Developer"],
+        "tags": [
+          "Developer"
+        ],
         "parameters": [],
         "operationId": "post/developers",
         "requestBody": {
@@ -8349,7 +8412,9 @@
             }
           }
         },
-        "tags": ["Developer"],
+        "tags": [
+          "Developer"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -8427,7 +8492,9 @@
             }
           }
         },
-        "tags": ["Developer"],
+        "tags": [
+          "Developer"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -8516,7 +8583,9 @@
             }
           }
         },
-        "tags": ["Developer"],
+        "tags": [
+          "Developer"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -8596,7 +8665,9 @@
             }
           }
         },
-        "tags": ["Game"],
+        "tags": [
+          "Game"
+        ],
         "parameters": [
           {
             "name": "sort",
@@ -8765,7 +8836,9 @@
             }
           }
         },
-        "tags": ["Game"],
+        "tags": [
+          "Game"
+        ],
         "parameters": [],
         "operationId": "post/games",
         "requestBody": {
@@ -8844,7 +8917,9 @@
             }
           }
         },
-        "tags": ["Game"],
+        "tags": [
+          "Game"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -8922,7 +8997,9 @@
             }
           }
         },
-        "tags": ["Game"],
+        "tags": [
+          "Game"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -9011,7 +9088,9 @@
             }
           }
         },
-        "tags": ["Game"],
+        "tags": [
+          "Game"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -9091,7 +9170,9 @@
             }
           }
         },
-        "tags": ["Platform"],
+        "tags": [
+          "Platform"
+        ],
         "parameters": [
           {
             "name": "sort",
@@ -9260,7 +9341,9 @@
             }
           }
         },
-        "tags": ["Platform"],
+        "tags": [
+          "Platform"
+        ],
         "parameters": [],
         "operationId": "post/platforms",
         "requestBody": {
@@ -9339,7 +9422,9 @@
             }
           }
         },
-        "tags": ["Platform"],
+        "tags": [
+          "Platform"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -9417,7 +9502,9 @@
             }
           }
         },
-        "tags": ["Platform"],
+        "tags": [
+          "Platform"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -9506,7 +9593,9 @@
             }
           }
         },
-        "tags": ["Platform"],
+        "tags": [
+          "Platform"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -9586,7 +9675,9 @@
             }
           }
         },
-        "tags": ["Publisher"],
+        "tags": [
+          "Publisher"
+        ],
         "parameters": [
           {
             "name": "sort",
@@ -9755,7 +9846,9 @@
             }
           }
         },
-        "tags": ["Publisher"],
+        "tags": [
+          "Publisher"
+        ],
         "parameters": [],
         "operationId": "post/publishers",
         "requestBody": {
@@ -9834,7 +9927,9 @@
             }
           }
         },
-        "tags": ["Publisher"],
+        "tags": [
+          "Publisher"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -9912,7 +10007,9 @@
             }
           }
         },
-        "tags": ["Publisher"],
+        "tags": [
+          "Publisher"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -10001,7 +10098,9 @@
             }
           }
         },
-        "tags": ["Publisher"],
+        "tags": [
+          "Publisher"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -10036,14 +10135,18 @@
           }
         },
         "summary": "",
-        "tags": ["Upload - File"],
+        "tags": [
+          "Upload - File"
+        ],
         "requestBody": {
           "description": "Upload files",
           "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
-                "required": ["files"],
+                "required": [
+                  "files"
+                ],
                 "type": "object",
                 "properties": {
                   "path": {
@@ -10106,7 +10209,9 @@
           }
         },
         "summary": "",
-        "tags": ["Upload - File"],
+        "tags": [
+          "Upload - File"
+        ],
         "requestBody": {
           "description": "Upload files",
           "required": true,
@@ -10142,7 +10247,9 @@
     },
     "/upload/files": {
       "get": {
-        "tags": ["Upload - File"],
+        "tags": [
+          "Upload - File"
+        ],
         "responses": {
           "200": {
             "description": "Get a list of files",
@@ -10174,7 +10281,9 @@
             }
           }
         ],
-        "tags": ["Upload - File"],
+        "tags": [
+          "Upload - File"
+        ],
         "responses": {
           "200": {
             "description": "Get a specific file",
@@ -10201,7 +10310,9 @@
             }
           }
         ],
-        "tags": ["Upload - File"],
+        "tags": [
+          "Upload - File"
+        ],
         "responses": {
           "200": {
             "description": "Delete a file",
@@ -10230,7 +10341,9 @@
             }
           }
         ],
-        "tags": ["Users-Permissions - Auth"],
+        "tags": [
+          "Users-Permissions - Auth"
+        ],
         "summary": "Login with a provider",
         "description": "Redirects to provider login before being redirect to /auth/{provider}/callback",
         "responses": {
@@ -10252,7 +10365,9 @@
     },
     "/auth/local": {
       "post": {
-        "tags": ["Users-Permissions - Auth"],
+        "tags": [
+          "Users-Permissions - Auth"
+        ],
         "summary": "Local login",
         "description": "Returns a jwt token and user info",
         "requestBody": {
@@ -10303,7 +10418,9 @@
     },
     "/auth/local/register": {
       "post": {
-        "tags": ["Users-Permissions - Auth"],
+        "tags": [
+          "Users-Permissions - Auth"
+        ],
         "summary": "Register a user",
         "description": "Returns a jwt token and user info",
         "requestBody": {
@@ -10358,7 +10475,9 @@
     },
     "/auth/{provider}/callback": {
       "get": {
-        "tags": ["Users-Permissions - Auth"],
+        "tags": [
+          "Users-Permissions - Auth"
+        ],
         "summary": "Default Callback from provider auth",
         "parameters": [
           {
@@ -10397,7 +10516,9 @@
     },
     "/auth/forgot-password": {
       "post": {
-        "tags": ["Users-Permissions - Auth"],
+        "tags": [
+          "Users-Permissions - Auth"
+        ],
         "summary": "Send rest password email",
         "requestBody": {
           "required": true,
@@ -10427,7 +10548,9 @@
                   "properties": {
                     "ok": {
                       "type": "string",
-                      "enum": [true]
+                      "enum": [
+                        true
+                      ]
                     }
                   }
                 }
@@ -10449,7 +10572,9 @@
     },
     "/auth/reset-password": {
       "post": {
-        "tags": ["Users-Permissions - Auth"],
+        "tags": [
+          "Users-Permissions - Auth"
+        ],
         "summary": "Rest user password",
         "requestBody": {
           "required": true,
@@ -10503,7 +10628,9 @@
     },
     "/auth/change-password": {
       "post": {
-        "tags": ["Users-Permissions - Auth"],
+        "tags": [
+          "Users-Permissions - Auth"
+        ],
         "summary": "Update user's own password",
         "requestBody": {
           "required": true,
@@ -10557,7 +10684,9 @@
     },
     "/auth/email-confirmation": {
       "get": {
-        "tags": ["Users-Permissions - Auth"],
+        "tags": [
+          "Users-Permissions - Auth"
+        ],
         "summary": "Confirm user email",
         "parameters": [
           {
@@ -10588,7 +10717,9 @@
     },
     "/auth/send-email-confirmation": {
       "post": {
-        "tags": ["Users-Permissions - Auth"],
+        "tags": [
+          "Users-Permissions - Auth"
+        ],
         "summary": "Send confirmation email",
         "requestBody": {
           "required": true,
@@ -10618,7 +10749,9 @@
                     },
                     "sent": {
                       "type": "string",
-                      "enum": [true]
+                      "enum": [
+                        true
+                      ]
                     }
                   }
                 }
@@ -10640,7 +10773,9 @@
     },
     "/users-permissions/permissions": {
       "get": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Get default generated permissions",
         "responses": {
           "200": {
@@ -10709,7 +10844,9 @@
     },
     "/users-permissions/roles": {
       "get": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "List roles",
         "responses": {
           "200": {
@@ -10768,7 +10905,9 @@
         }
       },
       "post": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Create a role",
         "requestBody": {
           "$ref": "#/components/requestBodies/Users-Permissions-RoleRequest"
@@ -10783,7 +10922,9 @@
                   "properties": {
                     "ok": {
                       "type": "string",
-                      "enum": [true]
+                      "enum": [
+                        true
+                      ]
                     }
                   }
                 }
@@ -10805,7 +10946,9 @@
     },
     "/users-permissions/roles/{id}": {
       "get": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Get a role",
         "parameters": [
           {
@@ -10870,7 +11013,9 @@
     },
     "/users-permissions/roles/{role}": {
       "put": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Update a role",
         "parameters": [
           {
@@ -10896,7 +11041,9 @@
                   "properties": {
                     "ok": {
                       "type": "string",
-                      "enum": [true]
+                      "enum": [
+                        true
+                      ]
                     }
                   }
                 }
@@ -10916,7 +11063,9 @@
         }
       },
       "delete": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Delete a role",
         "parameters": [
           {
@@ -10939,7 +11088,9 @@
                   "properties": {
                     "ok": {
                       "type": "string",
-                      "enum": [true]
+                      "enum": [
+                        true
+                      ]
                     }
                   }
                 }
@@ -10961,7 +11112,9 @@
     },
     "/users": {
       "get": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Get list of users",
         "responses": {
           "200": {
@@ -11002,7 +11155,9 @@
         }
       },
       "post": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Create a user",
         "requestBody": {
           "required": true,
@@ -11010,7 +11165,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["username", "email", "password"],
+                "required": [
+                  "username",
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "email": {
                     "type": "string"
@@ -11087,7 +11246,9 @@
     },
     "/users/{id}": {
       "get": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Get a user",
         "parameters": [
           {
@@ -11134,7 +11295,9 @@
         }
       },
       "put": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Update a user",
         "parameters": [
           {
@@ -11153,7 +11316,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["username", "email", "password"],
+                "required": [
+                  "username",
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "email": {
                     "type": "string"
@@ -11228,7 +11395,9 @@
         }
       },
       "delete": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Delete a user",
         "parameters": [
           {
@@ -11281,7 +11450,9 @@
     },
     "/users/me": {
       "get": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Get authenticated user info",
         "responses": {
           "200": {
@@ -11319,7 +11490,9 @@
     },
     "/users/count": {
       "get": {
-        "tags": ["Users-Permissions - Users & Roles"],
+        "tags": [
+          "Users-Permissions - Users & Roles"
+        ],
         "summary": "Get user count",
         "responses": {
           "200": {
