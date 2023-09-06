@@ -32,6 +32,27 @@ async function getGameInfo(slug) {
   };
 }
 
+async function getByName(name: string, entityService) {
+  const item = await strapi.service(entityService).find({
+    filters: { name },
+  });
+
+  return item.results.length ? item.results[0] : null;
+}
+
+async function create(name: string, entityService) {
+  const item = await getByName(name, entityService);
+
+  if (!item) {
+    await strapi.service(entityService).create({
+      data: {
+        name,
+        slug: slugify(name, { strict: true, lower: true }),
+      },
+    });
+  }
+}
+
 export default factories.createCoreService('api::game.game', () => ({
   async populate(params) {
     const {
@@ -41,21 +62,15 @@ export default factories.createCoreService('api::game.game', () => ({
     // await getGameInfo('cyberpunk_2077_phantom_liberty');
 
     products[2].developers.map(async (developer) => {
-      await strapi.service('api::developer.developer').create({
-        data: {
-          name: developer,
-          slug: slugify(developer, { strict: true, lower: true }),
-        },
-      });
+      await create(developer, 'api::developer.developer');
     });
 
     products[2].publishers.map(async (publisher) => {
-      await strapi.service('api::publisher.publisher').create({
-        data: {
-          name: publisher,
-          slug: slugify(publisher, { strict: true, lower: true }),
-        },
-      });
+      await create(publisher, 'api::publisher.publisher');
+    });
+
+    products[2].genres.map(async ({ name }) => {
+      await create(name, 'api::category.category');
     });
   },
 }));
