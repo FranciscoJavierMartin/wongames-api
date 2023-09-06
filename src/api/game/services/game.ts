@@ -157,49 +157,65 @@ export interface FullTagsList {
   slug: string;
 }
 
+function Exception(e) {
+  return { e, data: e.data?.errors };
+}
+
 async function getGameInfo(slug) {
-  const gogSlug = slug.replaceAll('-', '_').toLowerCase();
+  try {
+    const gogSlug = slug.replaceAll('-', '_').toLowerCase();
 
-  const body = await axios.get(`${process.env.GAME_URL}${gogSlug}`);
-  const dom = new JSDOM(body.data);
+    const body = await axios.get(`${process.env.GAME_URL}${gogSlug}`);
+    const dom = new JSDOM(body.data);
 
-  const raw_description = dom.window.document.querySelector('.description');
-  const description = raw_description.innerHTML;
-  const short_description = raw_description.textContent.slice(0, 160);
+    const raw_description = dom.window.document.querySelector('.description');
+    const description = raw_description.innerHTML;
+    const short_description = raw_description.textContent.slice(0, 160);
 
-  const ratingElement =
-    dom.window.document
-      .querySelector('.age-restrictions__icon use')
-      ?.getAttribute('xlink:href')
-      .replace(/_/g, ' ')
-      .replace('#', '')
-      .toUpperCase() ?? 'PEGI_3';
+    const ratingElement =
+      dom.window.document
+        .querySelector('.age-restrictions__icon use')
+        ?.getAttribute('xlink:href')
+        .replace(/_/g, ' ')
+        .replace('#', '')
+        .toUpperCase() ?? 'PEGI_3';
 
-  return {
-    description,
-    short_description,
-    ratingElement,
-  };
+    return {
+      description,
+      short_description,
+      ratingElement,
+    };
+  } catch (error) {
+    console.log('getGameInfo', Exception(error));
+  }
 }
 
 async function getByName(name: string, entityService: EntityService) {
-  const item = await strapi.service(entityService).find({
-    filters: { name },
-  });
+  try {
+    const item = await strapi.service(entityService).find({
+      filters: { name },
+    });
 
-  return item.results.length ? item.results[0] : null;
+    return item.results.length ? item.results[0] : null;
+  } catch (error) {
+    console.log('getByName', Exception(error));
+  }
 }
 
 async function create(name: string, entityService: EntityService) {
-  const item = await getByName(name, entityService);
+  try {
+    const item = await getByName(name, entityService);
 
-  if (!item) {
-    await strapi.service(entityService).create({
-      data: {
-        name,
-        slug: slugify(name, { strict: true, lower: true }),
-      },
-    });
+    if (!item) {
+      await strapi.service(entityService).create({
+        data: {
+          name,
+          slug: slugify(name, { strict: true, lower: true }),
+        },
+      });
+    }
+  } catch (error) {
+    console.log('create', Exception(error));
   }
 }
 
@@ -231,14 +247,19 @@ async function setImage({
 
   console.info(`Uploading ${field} image: ${game.slug}.jpg`);
 
-  await axios({
-    method: 'POST',
-    url: `http://localhost:1337/api/upload/`,
-    data: formData,
-    headers: {
-      'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
-    },
-  });
+  try {
+    await axios({
+      method: 'POST',
+      // TODO: Change url
+      url: `http://localhost:1337/api/upload/`,
+      data: formData,
+      headers: {
+        'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    });
+  } catch (error) {
+    console.log('setImage', Exception(error));
+  }
 }
 
 async function createManyToManyData(products: Product[]): Promise<void[]> {
@@ -332,11 +353,15 @@ async function createGames(products: Product[]) {
 
 export default factories.createCoreService('api::game.game', () => ({
   async populate(params) {
-    const {
-      data: { products },
-    } = await axios.get<Catalog>(process.env.CATALOG_URL);
+    try {
+      const {
+        data: { products },
+      } = await axios.get<Catalog>(process.env.CATALOG_URL);
 
-    // await createManyToManyData(products);
-    // await createGames(products);
+      // await createManyToManyData(products);
+      // await createGames(products);
+    } catch (error) {
+      console.log('populate', Exception(error));
+    }
   },
 }));
