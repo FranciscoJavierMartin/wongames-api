@@ -244,24 +244,56 @@ async function createManyToManyData(products: Product[]): Promise<void[]> {
   ]);
 }
 
+async function createGames(products: Product[]) {
+  await Promise.all(
+    products.map(async (product) => {
+      const item = await getByName(product.title, gameService);
+
+      if (!item) {
+        console.info(`Creating: ${product.title}...`);
+
+        const game = await strapi.service(gameService).create({
+          data: {
+            name: product.title,
+            slug: product.slug,
+            price: product.price.finalMoney.amount,
+            release_date: new Date(product.releaseDate),
+            categories: await Promise.all(
+              product.genres.map(({ name }) => getByName(name, categoryService))
+            ),
+            platforms: await Promise.all(
+              product.operatingSystems.map((name) =>
+                getByName(name, platformService)
+              )
+            ),
+            developers: await Promise.all(
+              product.developers.map((name) =>
+                getByName(name, developerService)
+              )
+            ),
+            publisher: await Promise.all(
+              product.publishers.map((name) =>
+                getByName(name, publisherService)
+              )
+            ),
+            ...(await getGameInfo(product.slug)),
+            publishedAt: new Date(),
+          },
+        });
+
+        return game;
+      }
+    })
+  );
+}
+
 export default factories.createCoreService('api::game.game', () => ({
   async populate(params) {
     const {
       data: { products },
     } = await axios.get<Catalog>(process.env.CATALOG_URL);
 
-    // await getGameInfo('cyberpunk_2077_phantom_liberty');
-
-    // products[2].developers.map(async (developer) => {
-    //   await create(developer, developerService);
-    // });
-
-    // products[2].publishers.map(async (publisher) => {
-    //   await create(publisher, publisherService);
-    // });
-
-    // products[2].genres.map(async ({ name }) => {
-    //   await create(name, categoryService);
-    // });
+    // await createManyToManyData(products);
+    // await createGames(products);
   },
 }));
