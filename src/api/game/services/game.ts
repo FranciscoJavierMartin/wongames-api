@@ -6,6 +6,7 @@ import { factories } from '@strapi/strapi';
 import axios from 'axios';
 import { JSDOM } from 'jsdom';
 import slugify from 'slugify';
+import qs from 'querystring';
 
 const gameService = 'api::game.game';
 const publisherService = 'api::publisher.publisher';
@@ -356,10 +357,12 @@ export default factories.createCoreService('api::game.game', () => ({
     try {
       const {
         data: { products },
-      } = await axios.get<Catalog>(process.env.CATALOG_URL);
+      } = await axios.get<Catalog>(
+        `${process.env.CATALOG_URL}?${qs.stringify(params)}`
+      );
 
-      // await createManyToManyData(products);
-      // await createGames(products);
+      await createManyToManyData([products[0]]);
+      await createGames([products[0]]);
     } catch (error) {
       console.log('populate', Exception(error));
     }
