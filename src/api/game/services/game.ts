@@ -7,6 +7,12 @@ import axios from 'axios';
 import { JSDOM } from 'jsdom';
 import slugify from 'slugify';
 import qs from 'querystring';
+import utils from '@strapi/utils';
+import os from 'os';
+import * as fse from 'fs-extra';
+import * as stream from 'stream';
+import path from 'path';
+import crypto from 'crypto';
 
 const gameService = 'api::game.game';
 const publisherService = 'api::publisher.publisher';
@@ -236,31 +242,60 @@ async function setImage({
   game: any;
   field?: 'cover' | 'gallery';
 }): Promise<void> {
-  const { data } = await axios.get(image, { responseType: 'arraybuffer' });
-  const buffer = Buffer.from(data, 'base64');
-  const FormData = require('form-data');
-  const formData: any = new FormData();
+  // const { data } = await axios.get(image, { responseType: 'arraybuffer' });
+  // const buffer = Buffer.from(data, 'base64');
+  // const FormData = require('form-data');
+  // const formData: any = new FormData();
+  // formData.append('refId', game.id);
+  // formData.append('ref', `${gameService}`);
+  // formData.append('field', field);
+  // formData.append('files', buffer, { filename: `${game.slug}.jpg` });
+  // console.info(`Uploading ${field} image: ${game.slug}.jpg`);
+  // try {
+  //   await axios({
+  //     method: 'POST',
+  //     // TODO: Change url
+  //     url: `http://localhost:1337/api/upload/`,
+  //     data: formData,
+  //     headers: {
+  //       'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
+  //     },
+  //   });
+  // } catch (error) {
+  //   console.log('setImage', Exception(error));
+  // }
+}
 
-  formData.append('refId', game.id);
-  formData.append('ref', `${gameService}`);
-  formData.append('field', field);
-  formData.append('files', buffer, { filename: `${game.slug}.jpg` });
-
-  console.info(`Uploading ${field} image: ${game.slug}.jpg`);
-
-  try {
-    await axios({
-      method: 'POST',
-      // TODO: Change url
-      url: `http://localhost:1337/api/upload/`,
-      data: formData,
-      headers: {
-        'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
-      },
-    });
-  } catch (error) {
-    console.log('setImage', Exception(error));
-  }
+async function setImage2({
+  image,
+  game,
+  field = 'cover',
+}: {
+  image: string;
+  game: any;
+  field?: 'cover' | 'gallery';
+}) {
+  // console.log(image);
+  // console.log({ image, refIf: game.id, ref: gameService, field });
+  // const myImage = await fetch(image);
+  // const myBlob = await myImage.blob();
+  // const form = new FormData();
+  // form.append('refId', game.id);
+  // form.append('ref', `${gameService}`);
+  // form.append('field', field);
+  // form.append('files', myBlob, `${game.slug}.jpg`);
+  // axios.post('http://localhost:1337/api/upload', form, {
+  //   headers: {
+  //     'Content-Type': `multipart/form-data`,
+  //   },
+  // });
+  // const response = await fetch('http://localhost:1337/api/upload', {
+  //   method: 'post',
+  //   body: form,
+  //   // headers: {
+  //   //   'Content-Type': `multipart/form-data`,
+  //   // },
+  // });
 }
 
 async function createManyToManyData(products: Product[]): Promise<void[]> {
@@ -333,10 +368,10 @@ async function createGames(products: Product[]) {
             publishedAt: new Date(),
           },
         });
-        await setImage({ image: product.coverHorizontal, game });
+        await setImage2({ image: product.coverHorizontal, game });
         await Promise.all(
           product.screenshots.slice(0, 5).map((url) =>
-            setImage({
+            setImage2({
               image: `${url.replace(
                 '{formatter}',
                 'product_card_v2_mobile_slider_639'
@@ -352,6 +387,114 @@ async function createGames(products: Product[]) {
   );
 }
 
+async function uploadFileBuffer({
+  file,
+  fileName,
+  // folder,
+  mime,
+  ext,
+  alternativeText,
+  caption,
+  refId,
+  ref,
+  field,
+}) {
+  if (!mime) {
+    throw new utils.errors.ApplicationError('mime type is undefined');
+  }
+  if (!ext) {
+    throw new utils.errors.ApplicationError('ext is undefined');
+  }
+  if (!file) {
+    throw new utils.errors.ApplicationError('file is undefined');
+  }
+  if (!fileName) {
+    throw new utils.errors.ApplicationError('fileName is undefined');
+  }
+
+  const config = strapi.config.get('plugin.upload');
+  const uploadService = strapi.service('plugin::upload.upload');
+
+  const randomSuffix = () => crypto.randomBytes(5).toString('hex');
+  const generateFileName = (name) => {
+    const baseName = utils.nameToSlug(name, {
+      separator: '_',
+      lowercase: false,
+    });
+
+    return `${baseName}_${randomSuffix()}`;
+  };
+
+  const createAndAssignTmpWorkingDirectoryToFiles = async (files) => {
+    const tmpWorkingDirectory = await fse.mkdtemp(
+      path.join(os.tmpdir(), 'strapi-upload-')
+    );
+
+    if (Array.isArray(files)) {
+      files.forEach((file) => {
+        file.tmpWorkingDirectory = tmpWorkingDirectory;
+      });
+    } else {
+      files.tmpWorkingDirectory = tmpWorkingDirectory;
+    }
+
+    return tmpWorkingDirectory;
+  };
+
+  const entity = {
+    name: `${fileName}${ext}`,
+    hash: generateFileName(fileName),
+    ext,
+    mime,
+    size: utils.file.bytesToKbytes(Number(file.length)),
+    provider: config.provider,
+    // folder,
+    caption,
+    alternativeText,
+    tmpWorkingDirectory: await createAndAssignTmpWorkingDirectoryToFiles({}),
+    getStream() {
+      return stream.Readable.from(file);
+    },
+    related: [
+      {
+        id: refId,
+        __type: ref,
+        __pivot: { field },
+      },
+    ],
+  };
+
+  await uploadService.uploadImage(entity);
+  return strapi.query('plugin::upload.file').create({ data: entity });
+}
+
+async function setImage3() {
+  const test = {
+    image:
+      'https://images.gog-statics.com/83e7fba76846120d81b564977290f82b4f16583c0b980e3565a03350d5720f98_product_card_v2_mobile_slider_639.jpg',
+    refIf: 22,
+    ref: 'api::game.game',
+    field: 'gallery',
+  };
+
+  const response = await axios.get(test.image, { responseType: 'arraybuffer' });
+  const fileParts = path.parse('my-image.jpg');
+  const uploadedFile = await uploadFileBuffer({
+    file: response.data,
+    fileName: fileParts.name,
+    mime: response.headers['content-type'],
+    ext: fileParts.ext,
+    alternativeText: 'Alt text',
+    caption: 'My caption',
+    refId: test.refIf,
+    ref: test.ref,
+    field: test.field,
+    // folder: '/',
+  });
+
+  console.log(uploadedFile);
+}
+
 export default factories.createCoreService('api::game.game', () => ({
   async populate(params) {
     try {
@@ -363,6 +506,7 @@ export default factories.createCoreService('api::game.game', () => ({
 
       await createManyToManyData([products[0]]);
       await createGames([products[0]]);
+      // setImage3();
     } catch (error) {
       console.log('populate', Exception(error));
     }
