@@ -233,71 +233,6 @@ function createCall(
   return Array.from(set).map((name) => create(name, entityName));
 }
 
-async function setImage({
-  image,
-  game,
-  field = 'cover',
-}: {
-  image: string;
-  game: any;
-  field?: 'cover' | 'gallery';
-}): Promise<void> {
-  // const { data } = await axios.get(image, { responseType: 'arraybuffer' });
-  // const buffer = Buffer.from(data, 'base64');
-  // const FormData = require('form-data');
-  // const formData: any = new FormData();
-  // formData.append('refId', game.id);
-  // formData.append('ref', `${gameService}`);
-  // formData.append('field', field);
-  // formData.append('files', buffer, { filename: `${game.slug}.jpg` });
-  // console.info(`Uploading ${field} image: ${game.slug}.jpg`);
-  // try {
-  //   await axios({
-  //     method: 'POST',
-  //     // TODO: Change url
-  //     url: `http://localhost:1337/api/upload/`,
-  //     data: formData,
-  //     headers: {
-  //       'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
-  //     },
-  //   });
-  // } catch (error) {
-  //   console.log('setImage', Exception(error));
-  // }
-}
-
-async function setImage2({
-  image,
-  game,
-  field = 'cover',
-}: {
-  image: string;
-  game: any;
-  field?: 'cover' | 'gallery';
-}) {
-  // console.log(image);
-  // console.log({ image, refIf: game.id, ref: gameService, field });
-  // const myImage = await fetch(image);
-  // const myBlob = await myImage.blob();
-  // const form = new FormData();
-  // form.append('refId', game.id);
-  // form.append('ref', `${gameService}`);
-  // form.append('field', field);
-  // form.append('files', myBlob, `${game.slug}.jpg`);
-  // axios.post('http://localhost:1337/api/upload', form, {
-  //   headers: {
-  //     'Content-Type': `multipart/form-data`,
-  //   },
-  // });
-  // const response = await fetch('http://localhost:1337/api/upload', {
-  //   method: 'post',
-  //   body: form,
-  //   // headers: {
-  //   //   'Content-Type': `multipart/form-data`,
-  //   // },
-  // });
-}
-
 async function createManyToManyData(products: Product[]): Promise<void[]> {
   const developersSet = new Set<string>();
   const publishersSet = new Set<string>();
@@ -368,10 +303,10 @@ async function createGames(products: Product[]) {
             publishedAt: new Date(),
           },
         });
-        await setImage2({ image: product.coverHorizontal, game });
+        await setImage({ image: product.coverHorizontal, game });
         await Promise.all(
           product.screenshots.slice(0, 5).map((url) =>
-            setImage2({
+            setImage({
               image: `${url.replace(
                 '{formatter}',
                 'product_card_v2_mobile_slider_639'
@@ -390,11 +325,8 @@ async function createGames(products: Product[]) {
 async function uploadFileBuffer({
   file,
   fileName,
-  // folder,
   mime,
   ext,
-  alternativeText,
-  caption,
   refId,
   ref,
   field,
@@ -448,9 +380,6 @@ async function uploadFileBuffer({
     mime,
     size: utils.file.bytesToKbytes(Number(file.length)),
     provider: config.provider,
-    // folder,
-    caption,
-    alternativeText,
     tmpWorkingDirectory: await createAndAssignTmpWorkingDirectoryToFiles({}),
     getStream() {
       return stream.Readable.from(file);
@@ -468,31 +397,26 @@ async function uploadFileBuffer({
   return strapi.query('plugin::upload.file').create({ data: entity });
 }
 
-async function setImage3() {
-  const test = {
-    image:
-      'https://images.gog-statics.com/83e7fba76846120d81b564977290f82b4f16583c0b980e3565a03350d5720f98_product_card_v2_mobile_slider_639.jpg',
-    refIf: 22,
-    ref: 'api::game.game',
-    field: 'gallery',
-  };
-
-  const response = await axios.get(test.image, { responseType: 'arraybuffer' });
-  const fileParts = path.parse('my-image.jpg');
-  const uploadedFile = await uploadFileBuffer({
+async function setImage({
+  image,
+  game,
+  field = 'cover',
+}: {
+  image: string;
+  game: any;
+  field?: 'cover' | 'gallery';
+}) {
+  const response = await axios.get(image, { responseType: 'arraybuffer' });
+  const fileParts = path.parse(`${game.slug}.jpg`);
+  await uploadFileBuffer({
     file: response.data,
     fileName: fileParts.name,
     mime: response.headers['content-type'],
     ext: fileParts.ext,
-    alternativeText: 'Alt text',
-    caption: 'My caption',
-    refId: test.refIf,
-    ref: test.ref,
-    field: test.field,
-    // folder: '/',
+    refId: game.id,
+    ref: gameService,
+    field: field,
   });
-
-  console.log(uploadedFile);
 }
 
 export default factories.createCoreService('api::game.game', () => ({
@@ -504,9 +428,8 @@ export default factories.createCoreService('api::game.game', () => ({
         `${process.env.CATALOG_URL}?${qs.stringify(params)}`
       );
 
-      await createManyToManyData([products[0]]);
-      await createGames([products[0]]);
-      // setImage3();
+      await createManyToManyData(products);
+      await createGames(products);
     } catch (error) {
       console.log('populate', Exception(error));
     }
